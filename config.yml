@@ -1,0 +1,134 @@
+# CCGL 仓储管理系统主配置文件
+
+# 系统基础配置
+system:
+  name: "CCGL Warehouse Management System"
+  version: "1.0.0"
+  environment: "production"
+  debug: false
+  timezone: "Asia/Shanghai"
+
+# 数据库配置
+database:
+  mysql:
+    host: "${DATABASE_HOST:localhost}"
+    port: "${DATABASE_PORT:3306}"
+    user: "${DATABASE_USER:ccgl_user}"
+    password: "${DATABASE_PASSWORD:ccgl_password}"
+    database: "${DATABASE_NAME:ccgl_warehouse}"
+    charset: "utf8mb4"
+    pool_size: 10
+    max_overflow: 20
+    pool_timeout: 30
+    pool_recycle: 3600
+  
+  redis:
+    host: "${REDIS_HOST:localhost}"
+    port: "${REDIS_PORT:6379}"
+    db: "${REDIS_DB:0}"
+    password: "${REDIS_PASSWORD:}"
+    max_connections: 50
+
+# Web服务配置
+web:
+  host: "${WEB_HOST:0.0.0.0}"
+  port: "${WEB_PORT:8000}"
+  workers: 4
+  timeout: 60
+  cors_origins: ["*"]
+  
+# MCP服务器配置
+mcp_servers:
+  preprocessing:
+    port: "${MCP_PREPROCESSING_PORT:8001}"
+    enabled: true
+  
+  ml_analysis:
+    port: "${MCP_ML_PORT:8002}"
+    enabled: true
+  
+  dashboard:
+    port: "${MCP_DASHBOARD_PORT:8003}"
+    enabled: true
+  
+  llm_integration:
+    port: "${MCP_LLM_PORT:8004}"
+    enabled: true
+
+# AI模型配置
+ai_models:
+  openai:
+    api_key: "${OPENAI_API_KEY:}"
+    model: "gpt-4"
+    max_tokens: 4000
+    temperature: 0.7
+  
+  anthropic:
+    api_key: "${ANTHROPIC_API_KEY:}"
+    model: "claude-3-sonnet-20240229"
+    max_tokens: 4000
+  
+  zhipu:
+    api_key: "${ZHIPU_API_KEY:}"
+    model: "glm-4"
+  
+  dashscope:
+    api_key: "${DASHSCOPE_API_KEY:}"
+    model: "qwen-turbo"
+
+# 机器学习配置
+machine_learning:
+  clustering:
+    default_algorithm: "kmeans"
+    max_clusters: 10
+    
+  anomaly_detection:
+    algorithms: ["isolation_forest", "one_class_svm"]
+    contamination: 0.1
+  
+  dimensionality_reduction:
+    methods: ["pca", "tsne", "umap"]
+    n_components: 2
+
+# 数据处理配置
+data_processing:
+  missing_values:
+    strategy: "auto"  # auto, mean, median, mode, knn
+    
+  outlier_detection:
+    methods: ["iqr", "zscore", "isolation_forest"]
+    threshold: 3.0
+  
+  normalization:
+    default_method: "standard"  # standard, minmax, robust
+
+# 日志配置
+logging:
+  level: "${LOG_LEVEL:INFO}"
+  file: "${LOG_FILE:logs/ccgl.log}"
+  max_size: "100MB"
+  backup_count: 5
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# 监控配置
+monitoring:
+  prometheus:
+    enabled: "${METRICS_ENABLED:true}"
+    port: "${PROMETHEUS_PORT:9090}"
+  
+  health_check:
+    interval: 30
+    timeout: 10
+
+# 安全配置
+security:
+  secret_key: "${SECRET_KEY:your_secret_key_here}"
+  jwt_secret: "${JWT_SECRET:your_jwt_secret_here}"
+  token_expire_hours: "${TOKEN_EXPIRE_HOURS:24}"
+  
+# 存储路径配置
+storage:
+  data_path: "${DATA_PATH:data/}"
+  model_path: "${MODEL_PATH:models/}"
+  cache_path: "${CACHE_PATH:cache/}"
+  log_path: "logs/"

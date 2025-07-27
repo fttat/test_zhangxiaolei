@@ -1,0 +1,84 @@
+{
+  "mcp_system": {
+    "version": "1.0.0",
+    "description": "CCGL MCP系统配置",
+    "orchestrator": {
+      "enabled": true,
+      "load_balancing": "round_robin",
+      "health_check_interval": 30,
+      "task_timeout": 300
+    }
+  },
+  "servers": {
+    "preprocessing": {
+      "enabled": true,
+      "host": "localhost",
+      "port": 8001,
+      "workers": 2,
+      "max_requests": 1000,
+      "timeout": 60,
+      "capabilities": [
+        "data_cleaning",
+        "missing_values",
+        "outlier_detection",
+        "normalization"
+      ]
+    },
+    "ml_analysis": {
+      "enabled": true,
+      "host": "localhost", 
+      "port": 8002,
+      "workers": 4,
+      "max_requests": 500,
+      "timeout": 120,
+      "capabilities": [
+        "clustering",
+        "anomaly_detection",
+        "association_rules",
+        "dimensionality_reduction"
+      ]
+    },
+    "dashboard": {
+      "enabled": true,
+      "host": "localhost",
+      "port": 8003,
+      "workers": 2,
+      "max_requests": 2000,
+      "timeout": 30,
+      "capabilities": [
+        "visualization",
+        "reporting",
+        "chart_generation",
+        "dashboard_export"
+      ]
+    },
+    "llm_integration": {
+      "enabled": true,
+      "host": "localhost",
+      "port": 8004,
+      "workers": 3,
+      "max_requests": 200,
+      "timeout": 60,
+      "capabilities": [
+        "natural_language_query",
+        "report_generation", 
+        "conversation",
+        "recommendation"
+      ]
+    }
+  },
+  "communication": {
+    "protocol": "http",
+    "serialization": "json",
+    "compression": true,
+    "encryption": false,
+    "retry_attempts": 3,
+    "retry_delay": 1000
+  },
+  "monitoring": {
+    "metrics_enabled": true,
+    "logging_level": "INFO",
+    "performance_tracking": true,
+    "error_tracking": true
+  }
+}
