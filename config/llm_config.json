@@ -1,0 +1,64 @@
+{
+  "llm_providers": {
+    "openai": {
+      "name": "OpenAI",
+      "models": {
+        "gpt-4": {
+          "max_tokens": 4096,
+          "temperature": 0.7,
+          "supports_streaming": true
+        },
+        "gpt-3.5-turbo": {
+          "max_tokens": 4096,
+          "temperature": 0.7,
+          "supports_streaming": true
+        }
+      },
+      "api_key_env": "OPENAI_API_KEY",
+      "base_url": "https://api.openai.com/v1"
+    },
+    "anthropic": {
+      "name": "Anthropic",
+      "models": {
+        "claude-3-opus": {
+          "max_tokens": 4096,
+          "temperature": 0.7,
+          "supports_streaming": true
+        },
+        "claude-3-sonnet": {
+          "max_tokens": 4096,
+          "temperature": 0.7,
+          "supports_streaming": true
+        }
+      },
+      "api_key_env": "ANTHROPIC_API_KEY",
+      "base_url": "https://api.anthropic.com"
+    },
+    "zhipu": {
+      "name": "Zhipu AI",
+      "models": {
+        "glm-4": {
+          "max_tokens": 4096,
+          "temperature": 0.7,
+          "supports_streaming": true
+        }
+      },
+      "api_key_env": "ZHIPU_API_KEY",
+      "base_url": "https://open.bigmodel.cn/api/paas/v4"
+    }
+  },
+  "default_provider": "openai",
+  "default_model": "gpt-4",
+  "conversation_settings": {
+    "max_history": 20,
+    "system_prompt": "You are an AI assistant specialized in warehouse management and data analysis. You help users understand their data, identify patterns, and make data-driven decisions.",
+    "temperature": 0.7,
+    "max_tokens": 2048
+  },
+  "analysis_prompts": {
+    "data_summary": "Analyze the following warehouse data and provide a comprehensive summary including key insights, patterns, and recommendations:",
+    "anomaly_explanation": "Explain the following anomalies detected in the warehouse data and suggest possible causes and actions:",
+    "clustering_interpretation": "Interpret the following clustering results and explain what each cluster represents in business terms:",
+    "trend_analysis": "Analyze the trends in this warehouse data and provide business insights and forecasts:"
+  }
+}

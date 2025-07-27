@@ -1,0 +1,35 @@
+analysis:
+  anomaly_detection:
+    contamination: 0.1
+  clustering:
+    max_clusters: 10
+  include_anomaly_detection: true
+  include_clustering: true
+  include_dimensionality_reduction: true
+data_source:
+  database:
+    database: ccgl_warehouse
+    host: localhost
+    password: ''
+    port: 3306
+    user: root
+  file_path: sample_data.csv
+  type: file
+logging:
+  level: INFO
+  log_file: ccgl_analytics.log
+output:
+  formats:
+  - csv
+  - json
+  output_dir: results
+  save_results: true
+preprocessing:
+  missing_strategy: auto
+  normalization_method: standard
+  outlier_method: iqr
+  steps:
+  - quality_check
+  - handle_missing
+  - detect_outliers
+  - normalize_data
