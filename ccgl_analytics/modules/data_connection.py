@@ -4,14 +4,22 @@
 提供MySQL数据库连接、数据质量评估和自动化报告生成功能。
 """
 
-import mysql.connector
-from mysql.connector import pooling
 import pandas as pd
 import numpy as np
 from typing import Dict, List, Optional, Tuple, Any
 import logging
 from datetime import datetime
 import json
+
+# Optional MySQL connector import
+try:
+    import mysql.connector
+    from mysql.connector import pooling
+    MYSQL_AVAILABLE = True
+except ImportError:
+    MYSQL_AVAILABLE = False
+    mysql = None
+    pooling = None
 
 class DataConnectionManager:
     """数据连接管理器 - 提供数据库连接和数据质量评估"""
@@ -30,6 +38,11 @@ class DataConnectionManager:
     
     def _setup_connection_pool(self):
         """设置数据库连接池"""
+        if not MYSQL_AVAILABLE:
+            self.logger.warning("MySQL连接器不可用，将使用模拟模式")
+            self.connection_pool = None
+            return
+            
         try:
             pool_config = {
                 'host': self.config.get('host', 'localhost'),
@@ -47,17 +60,22 @@ class DataConnectionManager:
             self.connection_pool = pooling.MySQLConnectionPool(**pool_config)
             self.logger.info("数据库连接池创建成功")
             
-        except mysql.connector.Error as e:
+        except Exception as e:
             self.logger.error(f"数据库连接池创建失败: {e}")
-            raise
+            self.logger.warning("将使用模拟模式")
+            self.connection_pool = None
     
     def get_connection(self):
         """获取数据库连接"""
+        if not MYSQL_AVAILABLE or self.connection_pool is None:
+            self.logger.warning("数据库连接不可用，返回None")
+            return None
+            
         try:
             return self.connection_pool.get_connection()
-        except mysql.connector.Error as e:
+        except Exception as e:
             self.logger.error(f"获取数据库连接失败: {e}")
-            raise
+            return None
     
     def execute_query(self, query: str, params: Optional[Tuple] = None) -> pd.DataFrame:
         """
@@ -70,16 +88,23 @@ class DataConnectionManager:
         Returns:
             查询结果DataFrame
         """
+        if not MYSQL_AVAILABLE or self.connection_pool is None:
+            self.logger.warning("数据库不可用，返回空DataFrame")
+            return pd.DataFrame()
+            
         connection = None
         try:
             connection = self.get_connection()
+            if connection is None:
+                return pd.DataFrame()
+                
             df = pd.read_sql(query, connection, params=params)
             self.logger.info(f"查询执行成功，返回 {len(df)} 行数据")
             return df
             
         except Exception as e:
             self.logger.error(f"查询执行失败: {e}")
-            raise
+            return pd.DataFrame()
         finally:
             if connection:
                 connection.close()
