@@ -232,6 +232,18 @@ def main():
         analysis_summary = analysis_core.get_analysis_summary()
         preprocessing_summary = preprocessor.get_preprocessing_summary()
         
+        # Generate web dashboard
+        try:
+            from ccgl_analytics.modules.web_dashboard import WebDashboardGenerator
+            dashboard_generator = WebDashboardGenerator()
+            dashboard_file = dashboard_generator.generate_comprehensive_dashboard(
+                analysis_results, processed_df.to_dict()
+            )
+            logger.info(f"Web dashboard generated: {dashboard_file}")
+        except Exception as e:
+            logger.warning(f"Failed to generate web dashboard: {str(e)}")
+            dashboard_file = None
+        
         # Combine all results
         final_results = {
             'analysis_summary': analysis_summary,
@@ -239,7 +251,8 @@ def main():
             'dataset_info': analysis_results.get('dataset_info', {}),
             'clustering': analysis_results.get('clustering', {}),
             'anomaly_detection': analysis_results.get('anomaly_detection', {}),
-            'dimensionality_reduction': analysis_results.get('dimensionality_reduction', {})
+            'dimensionality_reduction': analysis_results.get('dimensionality_reduction', {}),
+            'dashboard_file': dashboard_file
         }
         
         # Save results
@@ -279,6 +292,9 @@ def main():
                 if 'explained_variance_ratio' in pca_result:
                     total_variance = sum(pca_result['explained_variance_ratio'])
                     print(f"  PCA: {total_variance:.3f} variance explained by 2 components")
+        
+        if final_results.get('dashboard_file'):
+            print(f"\n📊 Web Dashboard: {final_results['dashboard_file']}")
         
         logger.info("Analysis completed successfully")
         return 0
