@@ -1,0 +1,55 @@
+{
+  "preprocessing_server": {
+    "port": 3001,
+    "tools": [
+      "data_quality_assessment",
+      "handle_missing_values", 
+      "detect_outliers",
+      "normalize_data",
+      "encode_categorical"
+    ],
+    "resources": [
+      "quality_reports",
+      "preprocessing_history"
+    ]
+  },
+  "ml_server": {
+    "port": 3002,
+    "tools": [
+      "kmeans_clustering",
+      "dbscan_clustering",
+      "anomaly_detection",
+      "pca_analysis",
+      "tsne_analysis"
+    ],
+    "resources": [
+      "cluster_models",
+      "analysis_results"
+    ]
+  },
+  "dashboard_server": {
+    "port": 3003,
+    "tools": [
+      "generate_chart",
+      "create_dashboard",
+      "export_report"
+    ],
+    "resources": [
+      "chart_templates",
+      "dashboard_layouts"
+    ]
+  },
+  "llm_server": {
+    "port": 3004,
+    "tools": [
+      "analyze_data",
+      "explain_results",
+      "generate_insights",
+      "answer_question"
+    ],
+    "resources": [
+      "conversation_history",
+      "analysis_context"
+    ]
+  }
+}

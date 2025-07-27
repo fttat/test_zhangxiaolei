@@ -1,0 +1,57 @@
+{
+  "name": "ccgl-mcp-system",
+  "version": "1.0.0",
+  "description": "CCGL Analytics MCP Server Configuration",
+  "servers": {
+    "preprocessing": {
+      "name": "ccgl-preprocessing-server",
+      "description": "Data preprocessing and quality management MCP server",
+      "command": "python",
+      "args": ["ccgl_mcp_servers/ccgl_preprocessing_mcp_server.py"],
+      "env": {
+        "PYTHONPATH": "."
+      }
+    },
+    "machine_learning": {
+      "name": "ccgl-ml-server", 
+      "description": "Machine learning analysis MCP server",
+      "command": "python",
+      "args": ["ccgl_mcp_servers/ccgl_ml_mcp_server.py"],
+      "env": {
+        "PYTHONPATH": "."
+      }
+    },
+    "dashboard": {
+      "name": "ccgl-dashboard-server",
+      "description": "Web dashboard and visualization MCP server", 
+      "command": "python",
+      "args": ["ccgl_mcp_servers/ccgl_dashboard_mcp_server.py"],
+      "env": {
+        "PYTHONPATH": "."
+      }
+    },
+    "llm": {
+      "name": "ccgl-llm-server",
+      "description": "Large language model integration MCP server",
+      "command": "python", 
+      "args": ["ccgl_mcp_servers/ccgl_llm_mcp_server.py"],
+      "env": {
+        "PYTHONPATH": ".",
+        "OPENAI_API_KEY": "${OPENAI_API_KEY}",
+        "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}"
+      }
+    }
+  },
+  "clients": {
+    "orchestrator": {
+      "name": "ccgl-orchestrator",
+      "description": "Main orchestrator client for coordinating MCP servers"
+    }
+  },
+  "settings": {
+    "log_level": "INFO",
+    "max_connections": 10,
+    "timeout": 30,
+    "retry_attempts": 3
+  }
+}
