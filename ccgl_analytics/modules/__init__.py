@@ -7,7 +7,14 @@ from .data_connection import DataConnectionManager
 from .data_preprocessing import DataPreprocessor
 from .analysis_core import AnalysisCore
 from .llm_config_manager import LLMConfigManager
-from .web_dashboard import WebDashboard
+
+# Optional imports for modules with external dependencies
+try:
+    from .web_dashboard import WebDashboard
+    WEB_DASHBOARD_AVAILABLE = True
+except ImportError:
+    WEB_DASHBOARD_AVAILABLE = False
+
 from .mcp_alchemy_connector import MCPAlchemyConnector
 from .mcp_config_manager import MCPConfigManager
 from .quickchart_mcp_client import QuickChartMCPClient
@@ -21,12 +28,16 @@ __all__ = [
     'DataPreprocessor',
     'AnalysisCore',
     'LLMConfigManager',
-    'WebDashboard',
     'MCPAlchemyConnector',
     'MCPConfigManager',
     'QuickChartMCPClient',
     'IntegratedMCPSystem',
     'MCPClientOrchestrator',
     'RelationshipExtraction',
-    'ResultOutput'
+    'ResultOutput',
+    'WEB_DASHBOARD_AVAILABLE'
 ]
+
+# Only add WebDashboard to __all__ if it's available
+if WEB_DASHBOARD_AVAILABLE:
+    __all__.append('WebDashboard')

@@ -20,7 +20,6 @@ from .modules.data_connection import DataConnectionManager
 from .modules.data_preprocessing import DataPreprocessor
 from .modules.analysis_core import AnalysisCore
 from .modules.llm_config_manager import LLMConfigManager
-from .modules.web_dashboard import WebDashboard
 
 # MCP imports
 from .modules.mcp_alchemy_connector import MCPAlchemyConnector
@@ -29,6 +28,13 @@ from .modules.integrated_mcp_system import IntegratedMCPSystem
 
 # Utilities
 from .utils.logger import get_logger
+
+# Optional imports
+try:
+    from .modules.web_dashboard import WebDashboard
+    WEB_DASHBOARD_AVAILABLE = True
+except ImportError:
+    WEB_DASHBOARD_AVAILABLE = False
 
 # Main analyzer class
 class CCGLAnalyzer:
@@ -50,7 +56,13 @@ class CCGLAnalyzer:
         self.preprocessor = DataPreprocessor()
         self.analysis_core = AnalysisCore()
         self.llm_manager = LLMConfigManager()
-        self.web_dashboard = WebDashboard()
+        
+        # Initialize web dashboard if available
+        if WEB_DASHBOARD_AVAILABLE:
+            self.web_dashboard = WebDashboard()
+        else:
+            self.web_dashboard = None
+            self.logger.warning("Web dashboard not available (missing dependencies)")
         
     def analyze_data(self, query=None, data=None, analysis_type=None):
         """Perform comprehensive data analysis.
@@ -84,7 +96,15 @@ class CCGLAnalyzer:
         Returns:
             dict: Generated report
         """
-        return self.web_dashboard.generate_report(results)
+        if self.web_dashboard:
+            return self.web_dashboard.generate_report(results)
+        else:
+            # Simple text report if web dashboard not available
+            return {
+                'title': 'CCGL Analytics Report',
+                'summary': 'Analysis completed successfully',
+                'results': results
+            }
 
 # Package-level convenience functions
 def get_analyzer(config_file=None):
@@ -103,11 +123,15 @@ __all__ = [
     'DataPreprocessor', 
     'AnalysisCore',
     'LLMConfigManager',
-    'WebDashboard',
     'MCPAlchemyConnector',
     'MCPConfigManager',
     'IntegratedMCPSystem',
     'get_analyzer',
     'quick_analysis',
-    'get_logger'
+    'get_logger',
+    'WEB_DASHBOARD_AVAILABLE'
 ]
+
+# Add WebDashboard to exports if available
+if WEB_DASHBOARD_AVAILABLE:
+    __all__.append('WebDashboard')
