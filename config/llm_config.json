@@ -1,0 +1,59 @@
+{
+  "models": {
+    "openai": {
+      "api_key": "${OPENAI_API_KEY}",
+      "model": "gpt-4",
+      "max_tokens": 4000,
+      "temperature": 0.7,
+      "enabled": true,
+      "priority": 1
+    },
+    "anthropic": {
+      "api_key": "${ANTHROPIC_API_KEY}",
+      "model": "claude-3-sonnet-20240229",
+      "max_tokens": 4000,
+      "temperature": 0.7,
+      "enabled": true,
+      "priority": 2
+    },
+    "zhipu": {
+      "api_key": "${ZHIPU_API_KEY}",
+      "model": "glm-4",
+      "max_tokens": 2000,
+      "temperature": 0.7,
+      "enabled": true,
+      "priority": 3
+    },
+    "dashscope": {
+      "api_key": "${DASHSCOPE_API_KEY}",
+      "model": "qwen-turbo",
+      "max_tokens": 2000,
+      "temperature": 0.7,
+      "enabled": true,
+      "priority": 4
+    }
+  },
+  "fallback_strategy": {
+    "enabled": true,
+    "max_retries": 3,
+    "fallback_order": ["openai", "anthropic", "zhipu", "dashscope"]
+  },
+  "capabilities": {
+    "natural_language_query": true,
+    "intent_parsing": true,
+    "report_generation": true,
+    "conversation": true,
+    "text_analysis": true,
+    "translation": false
+  },
+  "rate_limiting": {
+    "requests_per_minute": 60,
+    "tokens_per_minute": 100000,
+    "concurrent_requests": 10
+  },
+  "caching": {
+    "enabled": true,
+    "ttl": 3600,
+    "max_size": 1000
+  }
+}
