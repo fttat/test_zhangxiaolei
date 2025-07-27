@@ -1,0 +1,84 @@
+# CCGL仓储管理系统数据分析工程配置
+
+# 数据库配置
+database:
+  host: localhost
+  port: 3306
+  database: ccgl_warehouse
+  user: ccgl_user
+  password: your_secure_password
+  pool_size: 10
+
+# 数据预处理配置
+preprocessing:
+  missing_strategy: auto  # auto, mean, median, mode, knn, drop
+  outlier_method: iqr     # iqr, zscore, isolation_forest, lof
+  scaling_method: standard # standard, minmax, robust
+
+# 分析配置
+analysis:
+  clustering_methods:
+    - kmeans
+    - dbscan
+    - hierarchical
+  anomaly_methods:
+    - isolation_forest
+    - one_class_svm
+  reduction_methods:
+    - pca
+    - tsne
+  max_clusters: 10
+  min_support: 0.01
+  min_confidence: 0.5
+
+# MCP服务器配置
+mcp:
+  server_host: localhost
+  server_port: 8080
+  enable_ssl: false
+  log_level: INFO
+  max_connections: 100
+
+# AI/LLM配置
+llm:
+  openai_api_key: ""
+  anthropic_api_key: ""
+  zhipu_api_key: ""
+  qwen_api_key: ""
+  default_model: gpt-3.5-turbo
+  max_tokens: 4000
+  temperature: 0.7
+
+# Web仪表板配置
+web:
+  host: 0.0.0.0
+  port: 8000
+  debug: false
+  auto_reload: true
+
+# 日志配置
+logging:
+  level: INFO
+  file: logs/ccgl_analytics.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  max_size_mb: 10
+  backup_count: 5
+
+# 数据处理配置
+data_processing:
+  cache_timeout: 3600
+  max_workers: 4
+  batch_size: 1000
+  memory_limit_gb: 4
+
+# 安全配置
+security:
+  secret_key: your_secret_key_change_this
+  jwt_secret: your_jwt_secret_change_this
+  session_timeout: 3600
+
+# 监控配置
+monitoring:
+  enable_metrics: true
+  metrics_port: 9090
+  health_check_interval: 30
