@@ -1,0 +1,304 @@
+# CCGL Analytics System Configuration
+# ===================================
+
+# System Information
+system:
+  name: "CCGL Analytics System"
+  version: "1.0.0"
+  description: "Centralized Control and Group Learning Analytics Platform"
+  environment: "development"  # development, testing, production
+
+# Database Configuration
+database:
+  # Primary database connection
+  primary:
+    type: "mysql"  # mysql, postgresql, sqlite
+    host: "${DB_HOST:localhost}"
+    port: "${DB_PORT:3306}"
+    username: "${DB_USER:ccgl_user}"
+    password: "${DB_PASSWORD:secure_password}"
+    database: "${DB_NAME:ccgl_analytics}"
+    charset: "utf8mb4"
+    
+  # Connection pool settings
+  pool:
+    size: "${DB_POOL_SIZE:10}"
+    max_overflow: "${DB_MAX_OVERFLOW:20}"
+    timeout: "${DB_POOL_TIMEOUT:30}"
+    recycle: "${DB_POOL_RECYCLE:3600}"
+    pre_ping: true
+    
+  # Query settings
+  query:
+    timeout: 300
+    max_rows: 100000
+    chunk_size: "${CHUNK_SIZE:10000}"
+
+# Redis Configuration (Caching)
+redis:
+  host: "${REDIS_HOST:localhost}"
+  port: "${REDIS_PORT:6379}"
+  password: "${REDIS_PASSWORD:}"
+  db: "${REDIS_DB:0}"
+  ttl: "${CACHE_TTL:3600}"
+
+# MCP (Model Context Protocol) Configuration
+mcp:
+  # Server settings
+  server:
+    host: "${MCP_SERVER_HOST:localhost}"
+    port: "${MCP_SERVER_PORT:8000}"
+    enable_ssl: "${MCP_ENABLE_SSL:false}"
+    ssl_cert_path: "${MCP_SSL_CERT_PATH:}"
+    ssl_key_path: "${MCP_SSL_KEY_PATH:}"
+    
+  # Client settings
+  client:
+    timeout: "${MCP_CLIENT_TIMEOUT:30}"
+    max_connections: "${MCP_MAX_CONNECTIONS:100}"
+    heartbeat_interval: "${MCP_HEARTBEAT_INTERVAL:30}"
+    retry_attempts: 3
+    
+  # Server cluster configuration
+  servers:
+    preprocessing:
+      port: 8001
+      enabled: true
+    ml_analysis:
+      port: 8002
+      enabled: true
+    dashboard:
+      port: 8003
+      enabled: true
+    llm_integration:
+      port: 8004
+      enabled: true
+
+# LLM Provider Configuration
+llm:
+  # Default provider
+  default_provider: "openai"
+  
+  # Provider configurations
+  providers:
+    openai:
+      api_key: "${OPENAI_API_KEY:}"
+      organization: "${OPENAI_ORG_ID:}"
+      model: "${OPENAI_MODEL:gpt-4}"
+      max_tokens: 4000
+      temperature: 0.7
+      timeout: 60
+      
+    claude:
+      api_key: "${ANTHROPIC_API_KEY:}"
+      model: "${CLAUDE_MODEL:claude-3-sonnet-20240229}"
+      max_tokens: 4000
+      temperature: 0.7
+      timeout: 60
+      
+    zhipuai:
+      api_key: "${ZHIPU_API_KEY:}"
+      model: "${ZHIPU_MODEL:glm-4}"
+      max_tokens: 4000
+      temperature: 0.7
+      timeout: 60
+      
+    qwen:
+      api_key: "${DASHSCOPE_API_KEY:}"
+      model: "${QWEN_MODEL:qwen-turbo}"
+      max_tokens: 4000
+      temperature: 0.7
+      timeout: 60
+  
+  # Natural language processing settings
+  nlp:
+    language_detection: true
+    supported_languages: ["en", "zh-CN"]
+    default_language: "en"
+
+# Analysis Algorithm Configuration
+analysis:
+  # Data quality assessment
+  data_quality:
+    missing_value_threshold: 0.1
+    duplicate_threshold: 0.05
+    outlier_detection_method: "iqr"  # iqr, zscore, isolation_forest
+    quality_score_weights:
+      completeness: 0.3
+      uniqueness: 0.2
+      validity: 0.3
+      consistency: 0.2
+      
+  # Clustering algorithms
+  clustering:
+    default_algorithm: "kmeans"
+    algorithms:
+      kmeans:
+        n_clusters: "${DEFAULT_CLUSTER_COUNT:auto}"
+        max_iter: 300
+        random_state: 42
+        n_init: 10
+      dbscan:
+        eps: 0.5
+        min_samples: 5
+        metric: "euclidean"
+      hierarchical:
+        linkage: "ward"
+        distance_threshold: null
+        
+  # Anomaly detection
+  anomaly_detection:
+    algorithm: "isolation_forest"
+    contamination: "${ANOMALY_CONTAMINATION:0.1}"
+    algorithms:
+      isolation_forest:
+        n_estimators: 100
+        max_samples: "auto"
+        random_state: 42
+      local_outlier_factor:
+        n_neighbors: 20
+        contamination: 0.1
+      one_class_svm:
+        kernel: "rbf"
+        gamma: "scale"
+        
+  # Dimensionality reduction
+  dimensionality_reduction:
+    pca:
+      n_components: "${PCA_COMPONENTS:2}"
+      random_state: 42
+    tsne:
+      n_components: 2
+      perplexity: "${TSNE_PERPLEXITY:30}"
+      random_state: 42
+      max_iter: 1000
+    umap:
+      n_components: 2
+      n_neighbors: 15
+      min_dist: 0.1
+      
+  # Association rule mining
+  association_rules:
+    min_support: 0.01
+    min_confidence: 0.5
+    max_len: 4
+
+# Web Dashboard Configuration
+web:
+  # Server settings
+  server:
+    host: "${WEB_HOST:0.0.0.0}"
+    port: "${WEB_PORT:8080}"
+    debug: "${WEB_DEBUG:false}"
+    reload: "${WEB_RELOAD:false}"
+    
+  # Streamlit settings
+  streamlit:
+    host: "${STREAMLIT_HOST:localhost}"
+    port: "${STREAMLIT_PORT:8501}"
+    theme: "light"  # light, dark
+    
+  # FastAPI settings
+  fastapi:
+    host: "${FASTAPI_HOST:0.0.0.0}"
+    port: "${FASTAPI_PORT:8000}"
+    docs_url: "/docs"
+    redoc_url: "/redoc"
+    
+  # Chart configuration
+  charts:
+    api_url: "${QUICKCHART_API_URL:https://quickchart.io}"
+    width: "${CHART_WIDTH:800}"
+    height: "${CHART_HEIGHT:600}"
+    dpi: "${CHART_DPI:300}"
+    default_type: "bar"
+
+# Logging Configuration
+logging:
+  level: "${LOG_LEVEL:INFO}"
+  format: "${LOG_FORMAT:json}"  # json, text
+  file: "${LOG_FILE:logs/ccgl_analytics.log}"
+  max_size: "${LOG_MAX_SIZE:100MB}"
+  backup_count: "${LOG_BACKUP_COUNT:5}"
+  
+  # Logger configurations
+  loggers:
+    ccgl_analytics:
+      level: "INFO"
+      handlers: ["file", "console"]
+    sqlalchemy:
+      level: "WARNING"
+      handlers: ["file"]
+    mcp:
+      level: "INFO"
+      handlers: ["file", "console"]
+
+# Security Configuration
+security:
+  secret_key: "${SECRET_KEY:your_super_secret_key}"
+  algorithm: "${ALGORITHM:HS256}"
+  access_token_expire_minutes: "${ACCESS_TOKEN_EXPIRE_MINUTES:30}"
+  password_hash_rounds: "${PASSWORD_HASH_ROUNDS:12}"
+
+# Performance Configuration
+performance:
+  # Processing settings
+  max_workers: "${MAX_WORKERS:4}"
+  chunk_size: "${CHUNK_SIZE:10000}"
+  memory_limit: "${MEMORY_LIMIT:2GB}"
+  
+  # Caching
+  enable_cache: true
+  cache_ttl: "${CACHE_TTL:3600}"
+  query_cache_size: "${QUERY_CACHE_SIZE:1000}"
+  result_cache_size: "${RESULT_CACHE_SIZE:500}"
+  
+  # Timeouts
+  connection_timeout: "${CONNECTION_TIMEOUT:10}"
+  read_timeout: "${READ_TIMEOUT:30}"
+  write_timeout: "${WRITE_TIMEOUT:30}"
+
+# File Storage Configuration
+storage:
+  # Upload settings
+  upload_folder: "${UPLOAD_FOLDER:uploads/}"
+  max_upload_size: "${MAX_UPLOAD_SIZE:100MB}"
+  allowed_extensions: ["csv", "xlsx", "json", "parquet"]
+  
+  # Report settings
+  report_template_path: "${REPORT_TEMPLATE_PATH:templates/}"
+  report_output_path: "${REPORT_OUTPUT_PATH:reports/}"
+  report_formats: ["pdf", "html", "json"]
+
+# Monitoring Configuration
+monitoring:
+  enable_metrics: "${ENABLE_METRICS:true}"
+  prometheus_port: "${PROMETHEUS_PORT:9090}"
+  metrics_path: "${METRICS_PATH:/metrics}"
+  
+  # Health checks
+  health_check_interval: 60
+  service_timeout: 30
+
+# Feature Flags
+features:
+  experimental: "${ENABLE_EXPERIMENTAL_FEATURES:false}"
+  ml_pipeline: "${ENABLE_ML_PIPELINE:true}"
+  llm_integration: "${ENABLE_LLM_INTEGRATION:true}"
+  mcp_architecture: "${ENABLE_MCP_ARCHITECTURE:true}"
+  web_dashboard: "${ENABLE_WEB_DASHBOARD:true}"
+  realtime_processing: "${ENABLE_REALTIME:false}"
+  auto_scaling: "${AUTO_SCALE:false}"
+
+# Internationalization
+i18n:
+  default_language: "${DEFAULT_LANGUAGE:en}"
+  supported_languages: ["en", "zh-CN"]
+  timezone: "${TIMEZONE:UTC}"
+
+# Backup Configuration
+backup:
+  enabled: "${BACKUP_ENABLED:true}"
+  schedule: "${BACKUP_SCHEDULE:0 2 * * *}"  # Cron format
+  retention_days: "${BACKUP_RETENTION_DAYS:30}"
+  location: "${BACKUP_LOCATION:backups/}"
